@@ -1,0 +1,52 @@
+{
+  "users": [
+    {
+      "id": "001",
+      "login": "Dima",
+      "password": "qwerty123",
+      "registed_at": "2024-09-23",
+      "role_id": 0
+    }
+  ],
+  "roles": [
+    {
+      "id": 0,
+      "name": "Администратор"
+    },
+    {
+      "id": 1,
+      "name": "Модератор"
+    },
+    {
+      "id": 3,
+      "name": "Читатель"
+    },
+    {
+      "id": 4,
+      "name": "Гость"
+    }
+  ],
+  "items": [
+    {
+      "id": "001",
+      "title": "Maxler Protein",
+      "image_url": "./photos/7297.750x0.jpg",
+      "content": "Лучший протеин от Макслера (немецкая компания)",
+      "published_at": "2024-10-24"
+    },
+    {
+      "id": "002",
+      "title": "Norway Nature Omega 3",
+      "image_url": "./photos/norway_nature_super_omega-3_120_kapsul-500x500.jpg",
+      "content": "Супер дозировка от норвежской компании!",
+      "published_at": "2024-10-24"
+    },
+    {
+      "id": "003",
+      "title": "Maxler Creatine Mono",
+      "image_url": "./photos/admin-ajax.jpg",
+      "content": "Креатин от качественной немецкой компании",
+      "published_at": "2024-10-24"
+    }
+  ]
+}
