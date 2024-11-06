@@ -1,22 +1,23 @@
-import Entry from "./components/entry"
-import Header from "./components/header"
-import Registration from "./components/registration"
-import { Route } from "react-router-dom"
-import { Routes } from "react-router-dom"
+import { applyMiddleware, combineReducers, compose, createStore } from "redux"
+import {
+  productReducer,
+  productsReducer,
+  userReducer,
+  usersReducer,
+} from "./reducers"
 
-export const Store = () => {
-  return (
-    <>
-      <Header />
+import { thunk } from "redux-thunk"
 
-      <Routes>
-        <Route path="/" element={<Header />} />
-        <Route path="/register" element={<Registration />} />
-        <Route path="/entry" element={<Entry />} />
-        <Route path="/users" element={<div>Пользователи</div>} />
-        <Route path="/post" element={<div>Новая статья</div>} />
-        <Route path="*" element={<div>Ошибка</div>} />
-      </Routes>
-    </>
-  )
-}
+const reducer = combineReducers({
+  user: userReducer,
+  users: userReducer,
+  product: productReducer,
+  products: productsReducer,
+})
+
+const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose
+
+export const store = createStore(
+  reducer,
+  composeEnhancers(applyMiddleware(thunk))
+)

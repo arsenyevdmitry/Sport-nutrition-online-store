@@ -1,8 +1,12 @@
 import { Link } from "react-router-dom"
 import authFormSchema from "../validation/YupLogin"
-import sendFormData from "../validation/sendformdata"
+import { server } from "../bff/server"
+import { setUser } from "../actions/set-user"
 import styled from "styled-components"
+import { useDispatch } from "react-redux"
 import { useForm } from "react-hook-form"
+import { useNavigate } from "react-router-dom"
+import { useState } from "react"
 import { yupResolver } from "@hookform/resolvers/yup"
 
 const Entry = () => {
@@ -14,11 +18,27 @@ const Entry = () => {
     resolver: yupResolver(authFormSchema),
   })
 
+  const navigate = useNavigate()
+
+  const [serverError, setServerError] = useState("")
+  const dispatch = useDispatch()
+
+  const onSubmit = ({ login, password }) => {
+    server.authorize(login, password).then(({ error, res }) => {
+      if (error) {
+        setServerError(`Ошибка запроса: ${error}`)
+        return
+      }
+
+      dispatch(setUser(res))
+      navigate(-1)
+    })
+  }
+
   const loginError = errors.login?.message
   const passwordError = errors.password?.message
-
   return (
-    <FormContainer onSubmit={handleSubmit(sendFormData)}>
+    <FormContainer onSubmit={handleSubmit(onSubmit)}>
       <Label htmlFor="login">Вход</Label>
       <InputLogin type="text" placeholder="Логин" {...register("login")} />
       {loginError && <ErrorMessage>{loginError}</ErrorMessage>}
@@ -31,7 +51,7 @@ const Entry = () => {
       {passwordError && <ErrorMessage>{passwordError}</ErrorMessage>}
 
       <RegBorder>
-        <RegText href="#" onClick={handleSubmit(sendFormData)}>
+        <RegText to="/main" onClick={handleSubmit(onSubmit)}>
           Авторизоваться
         </RegText>
       </RegBorder>
@@ -74,7 +94,7 @@ const InputPassword = styled.input`
   border-radius: 3px;
 `
 
-const RegText = styled.a`
+const RegText = styled(Link)`
   font-family: "Montserrat";
   font-size: 16px;
   font-weight: 600;

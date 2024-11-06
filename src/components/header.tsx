@@ -1,19 +1,43 @@
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
+import {
+  selectUserLogin,
+  selectUserRole,
+  selectUserSession,
+} from "../selectors"
+
+import { ROLE } from "../constants"
+import { logout } from "../actions/logout"
 import styled from "styled-components"
+import { useDispatch } from "react-redux"
+import { useSelector } from "react-redux"
 
-const Header = () => (
-  <NavMenu>
-    <TitleText>RESULT</TitleText>
-    <Icons>
-      <img src="/src/icons/shopping-cart.png" alt="Shopping Cart" />
-      <img src="/src/icons/user-icon.png" alt="User Icon" />
-      <Registration>
-        <StyledLink to="/entry">Вход/Регистрация</StyledLink>
-      </Registration>
-    </Icons>
-  </NavMenu>
-)
-
+const Header = () => {
+  const dispatch = useDispatch()
+  const roleId = useSelector(selectUserRole)
+  const login = useSelector(selectUserLogin)
+  const session = useSelector(selectUserSession)
+  return (
+    <NavMenu>
+      <TitleText>RESULT</TitleText>
+      <Icons>
+        <img src="/src/icons/shopping-cart.png" alt="Shopping Cart" />
+        <img src="/src/icons/user-icon.png" alt="User Icon" />
+        <Registration>
+          {roleId === ROLE.GUEST ? (
+            <StyledLink to="/entry">Вход/Регистрация</StyledLink>
+          ) : (
+            <>
+              <div>{login}</div>
+              <a onClick={() => dispatch(logout(session))}>
+                <img src="/src/icons/log-out 1.png"></img>
+              </a>
+            </>
+          )}
+        </Registration>
+      </Icons>
+    </NavMenu>
+  )
+}
 // Styled components
 const NavMenu = styled.nav`
   width: 100%;
@@ -25,8 +49,8 @@ const NavMenu = styled.nav`
   display: flex;
   flex-direction: row;
   flex-wrap: nowrap;
-  padding-left: 900px; // Это может потребовать корректировки
-  gap: 500px; // Это может потребовать корректировки
+  padding-left: 900px;
+  gap: 500px;
   position: fixed;
   line-height: 70px;
 `
@@ -49,7 +73,6 @@ const Icons = styled.div`
 `
 
 const Registration = styled.div`
-  // Изменено с 'a' на 'div'
   font-family: "Montserrat";
   font-size: 15px;
   font-weight: 400;
